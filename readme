@@ -1,0 +1,26 @@
+Para correr cada código, é necessário descomentar o ficheiro a ser lido:
+
+*na main*
+
+    //monteCarloAB(argc, argv);
+    //monteCarloCD_a(argc, argv);
+    //monteCarloCD_b(argc, argv);
+    //monteCarloE_a(argc, argv);
+    monteCarloE_b(argc, argv);
+
+-Depois de descomentar, é necessario criar o programa para o determinado ficheiro.
+-Por exemplo, se for o ficheiro requisitoEB:
+
+*No terminal*
+
+    gcc -o requisitoEB main.c monteCarloE_b.c
+        para o caso das threads, nao esquecer do -pthread no final do gcc
+
+    e depois pode-se correr o programa:
+
+    ./requisitoEB poligon.txt 10 90000
+
+-indicando qual o ficheiro com pontos a ser lido( o ficheiro terá que ter o formato do ficheiro "poligon.txt"),
+-o número de filhos e a quantidade de pontos aleatorios a gerar.
+
+- o resultado dos pontos encontrados será depois visivel num ficheiro com nome identico ao do ficheiro corrido.
