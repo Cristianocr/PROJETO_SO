@@ -185,12 +185,13 @@ void *consumer_thread(void *args) {
 
         if (argsC->counter > argsC->M) {
             pthread_mutex_unlock(&trinco_c);
-            break;
+            pthread_exit(NULL);
         }
 
         p = argsC->points[consptr];
         consptr = (consptr + 1) % argsC->N;
         argsC->counter++;
+
         if (isInsidePolygon(argsC->polygon, argsC->num_points, p)) {
             argsC->points_inside++;
         }
@@ -216,7 +217,7 @@ void *producer_thread(void *args) {
 
         if (argsP->counter > argsP->M) {
             pthread_mutex_unlock(&trinco_p);
-            break;
+            pthread_exit(NULL);
         }
 
         argsP->points[prodptr] = p;
@@ -282,9 +283,7 @@ void mcThreadC(int argc, char *argv[]) {
 
     int N = M / C; //tamanho do buffer NUMERO DE PONTOS/ NUMERO DE CONSUMIDORES
 
-    /**
-     * tirar isto daqui
-     */
+    //nosso buffer, que terá os pontos produzidos
     Point *random_points = malloc(N * sizeof(Point));
     if (random_points == NULL) {
         perror("Erro ao alocar memória");

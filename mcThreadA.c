@@ -170,6 +170,7 @@ void generate_random_points(Point *points, int num_points) {
  */
 void *worker_thread(void *args) {
     ThreadArgs *thread_args = (ThreadArgs *) args;
+
     int points_inside = 0;
 
     pthread_mutex_lock(thread_args->mutex);
@@ -179,9 +180,9 @@ void *worker_thread(void *args) {
 
     int num_points_per_thread = thread_args->M / thread_args->W;
 
-    int end_point = (start_point == thread_args->W - 1) ? thread_args->M : (start_point * num_points_per_thread) +
-                                                                           num_points_per_thread;
     start_point = start_point * num_points_per_thread;
+
+    int end_point = start_point + num_points_per_thread;
 
     printf("Vou processar do ponto %d ao ponto %d\n", start_point, end_point);
 
@@ -255,8 +256,8 @@ void mcThreadA(int argc, char *argv[]) {
 
     pthread_t threads[W];
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-    ThreadArgs thread_args = {polygon, random_points, MAX_POINTS, 0, M, W, &mutex, 0};
 
+    ThreadArgs thread_args = {polygon, random_points, MAX_POINTS, 0, M, W, &mutex, 0};
 
     for (int i = 0; i < W; i++) {
         if (pthread_create(&threads[i], NULL, worker_thread, &thread_args) != 0) {

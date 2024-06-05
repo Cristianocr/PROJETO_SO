@@ -180,9 +180,9 @@ void *worker_thread(void *args) {
 
     int num_points_per_thread = thread_args->M / thread_args->W;
 
-    int end_point = (start_point == thread_args->W - 1) ? thread_args->M : (start_point * num_points_per_thread) +
-                                                                           num_points_per_thread;
     start_point = start_point * num_points_per_thread;
+
+    int end_point = start_point + num_points_per_thread;
 
     printf("Vou processar do ponto %d ao ponto %d\n", start_point, end_point);
 
@@ -201,6 +201,10 @@ void *worker_thread(void *args) {
     pthread_exit(NULL);
 }
 
+/**
+ * funçao que imprime a barra
+ * @param percentage
+ */
 void printBarra(double percentage) {
     printf("[");
     for (int i = 0; i < 100; i++) {
@@ -220,7 +224,7 @@ void printBarra(double percentage) {
  */
 void *barra_thread(void *args) {
     ThreadArgs *thread_args = (ThreadArgs *) args;
-    double percentage = 0;
+    double percentage;
     while (thread_args->points_processed < thread_args->M) {
         pthread_mutex_lock(thread_args->mutex);
         percentage = ((double) thread_args->points_processed / (double) thread_args->M) * 100.0;
